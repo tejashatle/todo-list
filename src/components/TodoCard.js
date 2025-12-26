@@ -10,8 +10,8 @@ export default function TodoCard({ todo, dispatch }){
     }   
 
     const handleDelete = (e) => {
-        dispatch({ type: "DELETE_TODO", payload: todo });
-        dispatch({ type: "CANCEL_EDITING_TODO"});
+        dispatch({ type: "DELETE_TODO", payload: todo.id });
+        dispatch({type: "CANCEL_EDITING_TODO"})
     }
     return(
         <div>

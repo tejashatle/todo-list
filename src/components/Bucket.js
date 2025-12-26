@@ -49,6 +49,9 @@ export default function Bucket({ buckets, setBuckets, setShowModal, dispatch }){
     }
     return (
         <div className='container-sm mt-3' width="300px">
+
+            <h2 className='my-4'>Bucket</h2>
+
             <form onSubmit={(e) => submitForm(e)}>
                 <div className='row mb-3'>
                     <label className='col-sm-2 col-form-label text-start'>Enter Bucket Name</label>

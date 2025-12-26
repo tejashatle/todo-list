@@ -6,7 +6,7 @@ export default function TodoList({ todos, dispatch }){
         <div className="container">
             {
                 todos.map((item, index) => (
-                    <TodoCard key={index} todo={item} dispatch={dispatch}></TodoCard>
+                    <TodoCard key={item.id} todo={item} dispatch={dispatch}></TodoCard>
                 ))
             }
 

@@ -60,6 +60,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
     const submitForm = (e) => {
         e.preventDefault();
         const newTodo = {
+            id: editingTodo ? editingTodo.id : Date.now(),
             todoTitle: title,
             todoDescription: description,
             todoStatus: status,
@@ -68,7 +69,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
             todoBucket: bucket
         };
         if (editingTodo) {
-            dispatch({ type: "UPDATE_TODO", payload: { old: editingTodo, new: newTodo } });
+            dispatch({ type: "UPDATE_TODO", payload: { id: editingTodo.id, new: newTodo } });
         } else {
             dispatch({ type: "ADD_TODO", payload: newTodo });
         }
@@ -92,6 +93,9 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
 
     return(
         <div className='container-sm mt-3' width="300px">
+
+            <h2 className='my-4'>Todo</h2>
+
             <form onSubmit={(e) => submitForm(e)}>
                 <div className='row mb-3'>
                     <label className='col-sm-2 col-form-label text-start'>Enter Title</label>
@@ -152,11 +156,11 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
                     </div>
                 </div>
 
-                    <div className="d-flex gap-2">
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="d-flex gap-2">
+                    <button type="submit" className="btn btn-primary">Submit</button>
 
-                        { editingTodo && <button type="button" className="btn btn-danger" onClick={(e) => handleCancelEdit(e)}>Cancel Edit</button> }
-                    </div>
+                    { editingTodo && <button type="button" className="btn btn-danger" onClick={(e) => handleCancelEdit(e)}>Cancel Edit</button> }
+                </div>
 
             </form>
         </div>
