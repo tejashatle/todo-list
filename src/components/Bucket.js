@@ -1,6 +1,7 @@
-import react, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
+import BucketList from './BucketList';
 
-export default function Bucket({ buckets, setBuckets, setShowModal, dispatch }){
+export default function Bucket({ buckets, setShowModal, dispatch, editingBucket }){
 
     const [bucketName, setBucketName] = useState('');
     const [bucketDesc, setBucketDesc] = useState('');
@@ -10,25 +11,42 @@ export default function Bucket({ buckets, setBuckets, setShowModal, dispatch }){
         e.preventDefault();
 
         const newBucket = {
+            id: editingBucket ? editingBucket.id : Date.now(),
             bucketName: bucketName,
             bucketDescription: bucketDesc,
             bucketCategory: category
         };
-        // setBuckets(
-        //     prev => [...prev, {
-        //         bucketName: bucketName,
-        //         bucketDesc: bucketDesc,
-        //         category: category
-        //     }]
-        // )
-        dispatch({
-            type: "ADD_BUCKET",
-            payload: newBucket
-        })
-        setShowModal(false)
+
+        if (editingBucket) {
+            dispatch({
+                type: "UPDATE_BUCKET",
+                payload: newBucket
+            });
+            //dispatch({ type: "CANCEL_EDITING_BUCKET" });
+        } else {
+            dispatch({
+                type: "ADD_BUCKET",
+                payload: newBucket
+            });
+        }
+        setShowModal(false);
         clearForm();
-        console.log(buckets);
+        dispatch({ type: "SET_EDITING_BUCKET", payload: null });
     }
+
+    useEffect(() => {
+            if (editingBucket) {
+                setBucketName(editingBucket.bucketName);
+                setBucketDesc(editingBucket.bucketDescription);
+                setCategory(editingBucket.bucketCategory);
+            }
+        }, [editingBucket]);
+    
+    const handleCancelEdit = (e) => {
+        dispatch({type: "CANCEL_EDITING_BUCKET"})
+        clearForm();
+    }
+
 
     const clearForm = () => {
         setBucketName('');
@@ -47,6 +65,8 @@ export default function Bucket({ buckets, setBuckets, setShowModal, dispatch }){
     const handleCategory = (e) =>{
         setCategory(e.target.value);
     }
+
+    
     return (
         <div className='container-sm mt-3' width="300px">
 
@@ -79,10 +99,14 @@ export default function Bucket({ buckets, setBuckets, setShowModal, dispatch }){
                     </div>
                 </div>
                 
-                 <div className="col-1">
-                    <button type="submit" className="btn btn-primary" >Submit</button>
+                 <div className="d-flex gap-2">
+                    <button type="submit" className="btn btn-primary" style={{width: '150px'}}>{editingBucket ? "Update Bucket" : "Create Bucket"}</button>
+
+                    { editingBucket && <button type="button" className="btn btn-danger" onClick={(e) => handleCancelEdit(e)}>Cancel Edit</button> }
                 </div>
             </form>
+
+            <BucketList buckets={buckets} dispatch={dispatch}></BucketList>
         </div>
     );
 }

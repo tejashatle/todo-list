@@ -14,7 +14,7 @@ export default function Modal({ buckets, setBuckets, showModal, setShowModal, di
                 <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Close"></button>
             </div>
             <div className="modal-body">
-                <Bucket buckets={buckets} setBuckets={setBuckets} setShowModal={setShowModal} dispatch={dispatch}/>
+                <Bucket buckets={buckets} setShowModal={setShowModal} dispatch={dispatch}/>
 
                 
             </div>

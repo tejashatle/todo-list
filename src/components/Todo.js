@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import TodoList from './TodoList';
+import { useNavigate } from 'react-router-dom';
 
 export default function Todo({ buckets, setShowModal, todos, dispatch, editingTodo }){
 
@@ -10,11 +12,13 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
     const[priority, setPriority] = useState("Low");
     const[bucket, setBucket] = useState("");
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (bucket === "" && buckets.length > 0) {
             setBucket(buckets[buckets.length - 1].bucketName);
         }
-    }, [buckets]);
+    }, [buckets, bucket]);
 
     useEffect(() => {
         if (editingTodo) {
@@ -69,7 +73,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
             todoBucket: bucket
         };
         if (editingTodo) {
-            dispatch({ type: "UPDATE_TODO", payload: { id: editingTodo.id, new: newTodo } });
+            dispatch({ type: "UPDATE_TODO", payload: newTodo });
         } else {
             dispatch({ type: "ADD_TODO", payload: newTodo });
         }
@@ -157,12 +161,14 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
                 </div>
 
                 <div className="d-flex gap-2">
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary">{editingTodo ? "Update Todo" : "Add Todo"}</button>
 
                     { editingTodo && <button type="button" className="btn btn-danger" onClick={(e) => handleCancelEdit(e)}>Cancel Edit</button> }
                 </div>
 
             </form>
+
+              <TodoList todos={todos} dispatch={dispatch}></TodoList>
         </div>
     )
 }

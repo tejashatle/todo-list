@@ -1,15 +1,5 @@
 export const todoReducer = (state, action) => {
     switch(action.type){
-        case "LOAD_BUCKETS":
-            return {
-                ...state,
-                buckets: action.payload
-            }
-        case "ADD_BUCKET":
-            return {
-                ...state,
-                buckets: [...state.buckets, action.payload]
-            }
         case "LOAD_TODOS":
             return {
                 ...state,
@@ -23,19 +13,13 @@ export const todoReducer = (state, action) => {
         case "UPDATE_TODO":
             return {
                 ...state,
-                todos: state.todos.map(t => t.id === action.payload.id ? action.payload.new : t)
+                todos: state.todos.map(t => t.id === action.payload.id ? action.payload : t)
             }
         case "DELETE_TODO":
             return {
                 ...state,
                 todos: state.todos.filter(t => t.id !== action.payload)
             }
-        case "EDIT_TODO":
-            return {
-                ...state,
-
-            }
-
         case "SET_EDITING_TODO":
             return {
                 ...state,
