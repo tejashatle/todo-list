@@ -120,9 +120,9 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
                     <div className="col-sm-7">
                         <select className='form-select  form-select-sm' value={status} onChange={(e) => handleStatus(e)}>
                             <option value="">-- Select Status --</option>
-                            <option value="pending">Pending</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="completed">Completed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
                         </select>
                     </div>
                 </div>
@@ -139,9 +139,9 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
                     <div className="col-sm-7">
                         <select className='form-select  form-select-sm' value={priority} onChange={(e) => handlePriority(e)}>
                             <option value="">-- Select Priority --</option>
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
                         </select>
                     </div>
                 </div>

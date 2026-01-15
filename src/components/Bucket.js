@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import BucketList from './BucketList';
 
-export default function Bucket({ buckets, setShowModal, dispatch, editingBucket }){
+export default function Bucket({ buckets, setShowModal, dispatch, editingBucket, showModal }){
 
     const [bucketName, setBucketName] = useState('');
     const [bucketDesc, setBucketDesc] = useState('');
@@ -70,7 +70,7 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket 
     return (
         <div className='container-sm mt-3' width="300px">
 
-            <h2 className='my-4'>Bucket</h2>
+            <h2 className='my-4'>{!showModal ? 'Bucket' : '' }</h2>
 
             <form onSubmit={(e) => submitForm(e)}>
                 <div className='row mb-3'>
@@ -92,9 +92,9 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket 
                     <div className="col-sm-7">
                         <select className='form-select  form-select-sm' value={category} onChange={(e) => handleCategory(e)}>
                             <option value="">-- Select Category --</option>
-                            <option value="bug">Bug</option>
-                            <option value="deployment">Deployment</option>
-                            <option value="testing">Testing</option>
+                            <option value="Bug">Bug</option>
+                            <option value="Deployment">Deployment</option>
+                            <option value="Testing">Testing</option>
                         </select>
                     </div>
                 </div>
@@ -106,7 +106,7 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket 
                 </div>
             </form>
 
-            <BucketList buckets={buckets} dispatch={dispatch}></BucketList>
+            <BucketList buckets={buckets} dispatch={dispatch} showModal={showModal}></BucketList>
         </div>
     );
 }
