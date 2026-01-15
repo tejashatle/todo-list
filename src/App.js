@@ -5,7 +5,7 @@ import { useState, useEffect, useReducer } from 'react';
 import Modal from './components/Modal';
 import { todoReducer } from './reducers/todoReducer';
 import { bucketReducer } from './reducers/bucketReducer';
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { HashRouter, Routes, Route, NavLink } from 'react-router-dom';
 
 function App() {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="App">
       {/* <Bucket buckets={buckets} setBuckets={setBuckets} setShowModal={setShowModal} /> */}
-      <BrowserRouter>
+      <HashRouter>
 
       <div className="d-lg-flex flex-row">
         <div className="p-2 col-lg-2 bg-light" style={{height: "100vh"}}>
@@ -72,7 +72,7 @@ function App() {
           
         </div>
       </div>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
