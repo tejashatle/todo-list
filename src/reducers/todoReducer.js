@@ -32,6 +32,11 @@ export const todoReducer = (state, action) => {
                 editingTodo: null,
             }
 
+        case "IS_COMPLETED":
+            return {
+                ...state,
+                todos: state.todos.map(t => t.id === action.payload.id ? action.payload : t)
+            }
         default:
             return state;
     }

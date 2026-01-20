@@ -168,7 +168,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
 
             </form>
 
-              <TodoList todos={todos} dispatch={dispatch}></TodoList>
+              <TodoList todos={todos} dispatch={dispatch} setStatus={setStatus}></TodoList>
         </div>
     )
 }

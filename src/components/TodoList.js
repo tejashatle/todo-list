@@ -1,7 +1,7 @@
 import React from "react";
 import TodoCard from "./TodoCard";
 
-export default function TodoList({ todos, dispatch }){
+export default function TodoList({ todos, dispatch, setStatus }){
 
     const handleEdit = (e, todo) =>{
         dispatch({
@@ -12,9 +12,20 @@ export default function TodoList({ todos, dispatch }){
 
     const handleDelete = (e, todo) => {
         dispatch({ type: "DELETE_TODO", payload: todo.id });
-        dispatch({type: "CANCEL_EDITING_TODO"})
+        dispatch({ type: "CANCEL_EDITING_TODO"})
     }
 
+    const handleIsChecked = (e, todo) => {
+        if(e.target.checked){
+            todo.todoStatus = "Completed";
+        }else{
+            todo.todoStatus = "In Progress";
+        }
+        dispatch({
+            type: "IS_COMPLETED",
+            payload: todo
+        })
+    }
     
     return (
         <div className="container mt-4">
@@ -22,6 +33,7 @@ export default function TodoList({ todos, dispatch }){
              <table className="table">
                 <thead className="table-light">
                     <tr>
+                        <th></th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Status</th>
@@ -36,7 +48,10 @@ export default function TodoList({ todos, dispatch }){
                    
             {
                 todos.map((item, index) => (
-                    <tr>
+                    <tr className={item.todoStatus === "Completed" ? 'text-decoration-line-through' : ''}>   
+                        <td key={index}>
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" onClick={(e) => handleIsChecked(e, item)}/>
+                        </td>
                         <td>{item.todoTitle}</td>
                         <td>{item.todoDescription}</td>
                         <td>{item.todoStatus}</td>
