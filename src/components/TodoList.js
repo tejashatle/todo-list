@@ -50,7 +50,7 @@ export default function TodoList({ todos, dispatch, setStatus }){
                 todos.map((item, index) => (
                     <tr className={item.todoStatus === "Completed" ? 'text-decoration-line-through' : ''}>   
                         <td key={index}>
-                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" onClick={(e) => handleIsChecked(e, item)}/>
+                            <input class="form-check-input" type="checkbox" value="" checked={item.todoStatus === "Completed" ? "checked" : ""} id="defaultCheck1" onClick={(e) => handleIsChecked(e, item)}/>
                         </td>
                         <td>{item.todoTitle}</td>
                         <td>{item.todoDescription}</td>

@@ -29,6 +29,8 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket,
                 payload: newBucket
             });
         }
+
+        
         setShowModal(false);
         clearForm();
         dispatch({ type: "SET_EDITING_BUCKET", payload: null });
