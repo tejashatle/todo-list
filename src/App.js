@@ -6,6 +6,8 @@ import Modal from './components/Modal';
 import { todoReducer } from './reducers/todoReducer';
 import { bucketReducer } from './reducers/bucketReducer';
 import { HashRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { bucketApiService } from './services/bucketApi';
+import { todoApiService } from './services/todoApi';
 
 function App() {
   const [showModal, setShowModal] = useState(false);
@@ -15,22 +17,34 @@ function App() {
   const [todoState, todoDispatch] = useReducer(todoReducer, todoInitialState);
   const [bucketState, bucketDispatch] = useReducer(bucketReducer, bucketInitialState);
 
+ // const [bucket, setBuckets] = useState([]);
+
+    //  useEffect(() => {
+    //     bucketApiService.getAllBuckets().then((result) => {setBuckets(result.data); console.log(result.data); })
+    // }, [])
+
   useEffect(() => {
-    const savedBuckets = localStorage.getItem('buckets');
-    if (savedBuckets) {
-      bucketDispatch({ type: "LOAD_BUCKETS", payload: JSON.parse(savedBuckets) });
-    }
+    const loadBuckets = async () => {
+      try {
+        const response = await bucketApiService.getAllBuckets();
+        bucketDispatch({ type: "LOAD_BUCKETS", payload: response.data });
+      } catch (error) {
+        console.error('Failed to load buckets:', error);
+      }
+    };
+    loadBuckets();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('buckets', JSON.stringify(bucketState.buckets));
-  }, [bucketState.buckets]);
-
-  useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-    if (savedTodos) {
-      todoDispatch({ type: "LOAD_TODOS", payload: JSON.parse(savedTodos) });
-    }
+    const loadTodos = async () => {
+      try {
+        const response = await todoApiService.getAllTodos();
+        todoDispatch({ type: "LOAD_TODOS", payload: response.data });
+      } catch (error) {
+        console.error('Failed to load todos:', error);
+      }
+    };
+    loadTodos();
   }, []);
 
   useEffect(() => {
@@ -63,7 +77,7 @@ function App() {
         </div>
         <div className="p-2 col-lg-10">
           <Routes>
-            <Route path="/todo" element={ <Todo buckets={bucketState.buckets} setShowModal={setShowModal} todos={todoState.todos} dispatch={todoDispatch} editingTodo={todoState.editingTodo} key={todoState.editingTodo ? todoState.editingTodo.todoTitle : 'new'}/>} />
+            <Route path="/todo" element={ <Todo todos={todoState.todos} buckets={bucketState.buckets} setShowModal={setShowModal} dispatch={todoDispatch} editingTodo={todoState.editingTodo} key={todoState.editingTodo ? todoState.editingTodo.todoTitle : 'new'}/>} />
             <Route path="/bucket" element={ <Bucket buckets={bucketState.buckets} setShowModal={setShowModal} dispatch={bucketDispatch} editingBucket={bucketState.editingBucket} />} />
             
           </Routes>

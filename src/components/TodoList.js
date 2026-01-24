@@ -1,5 +1,6 @@
 import React from "react";
 import TodoCard from "./TodoCard";
+import { todoApiService } from "../services/todoApi";
 
 export default function TodoList({ todos, dispatch, setStatus }){
 
@@ -10,8 +11,14 @@ export default function TodoList({ todos, dispatch, setStatus }){
         })
     }   
 
-    const handleDelete = (e, todo) => {
-        dispatch({ type: "DELETE_TODO", payload: todo.id });
+    const handleDelete = async (e, todo) => {
+        try{
+            const response = await todoApiService.deleteTodo(todo.todoId);
+            dispatch({ type: "DELETE_TODO", payload: todo.todoId });
+        }catch(error){
+            console.error(error);
+        }
+        
         dispatch({ type: "CANCEL_EDITING_TODO"})
     }
 
@@ -50,14 +57,14 @@ export default function TodoList({ todos, dispatch, setStatus }){
                 todos.map((item, index) => (
                     <tr className={item.todoStatus === "Completed" ? 'text-decoration-line-through' : ''}>   
                         <td key={index}>
-                            <input class="form-check-input" type="checkbox" value="" checked={item.todoStatus === "Completed" ? "checked" : ""} id="defaultCheck1" onClick={(e) => handleIsChecked(e, item)}/>
+                            <input class="form-check-input" type="checkbox" value="" checked={item.todoStatus === "Completed" ? "checked" : ""} onClick={(e) => handleIsChecked(e, item)}/>
                         </td>
                         <td>{item.todoTitle}</td>
                         <td>{item.todoDescription}</td>
                         <td>{item.todoStatus}</td>
                         <td>{item.todoDueDate}</td>
                         <td>{item.todoPriority}</td>
-                        <td>{item.todoBucket}</td>
+                        <td>{item.todoBucketName}</td>
                         <td>
                             <button type="submit" className="btn btn-outline-primary btn-sm mx-2 px-4" onClick={(e) => handleEdit(e, item)} >Edit</button>
                             <button type="submit" className="btn btn-outline-danger btn-sm px-4" onClick={(e) => handleDelete(e, item)} >Delete</button>

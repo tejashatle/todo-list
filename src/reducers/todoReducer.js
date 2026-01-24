@@ -13,12 +13,12 @@ export const todoReducer = (state, action) => {
         case "UPDATE_TODO":
             return {
                 ...state,
-                todos: state.todos.map(t => t.id === action.payload.id ? action.payload : t)
+                todos: state.todos.map(t => t.todoId === action.payload.todoId ? action.payload : t)
             }
         case "DELETE_TODO":
             return {
                 ...state,
-                todos: state.todos.filter(t => t.id !== action.payload)
+                todos: state.todos.filter(t => t.todoId !== action.payload)
             }
         case "SET_EDITING_TODO":
             return {
@@ -35,7 +35,7 @@ export const todoReducer = (state, action) => {
         case "IS_COMPLETED":
             return {
                 ...state,
-                todos: state.todos.map(t => t.id === action.payload.id ? action.payload : t)
+                todos: state.todos.map(t => t.todoId === action.payload.todoId ? action.payload : t)
             }
         default:
             return state;

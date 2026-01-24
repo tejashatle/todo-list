@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import TodoList from './TodoList';
 import { useNavigate } from 'react-router-dom';
+import { todoApiService } from '../services/todoApi';
 
-export default function Todo({ buckets, setShowModal, todos, dispatch, editingTodo }){
+export default function Todo({ todos, buckets, setShowModal, dispatch, editingTodo }){
 
 
     const[title, setTitle] = useState("");
@@ -12,13 +13,9 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
     const[priority, setPriority] = useState("Low");
     const[bucket, setBucket] = useState("");
 
+
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (bucket === "" && buckets.length > 0) {
-            setBucket(buckets[buckets.length - 1].bucketName);
-        }
-    }, [buckets, bucket]);
 
     useEffect(() => {
         if (editingTodo) {
@@ -27,7 +24,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
             setStatus(editingTodo.todoStatus);
             setDueDate(editingTodo.todoDueDate);
             setPriority(editingTodo.todoPriority);
-            setBucket(editingTodo.todoBucket);
+            setBucket(editingTodo.todoBucketId);
         }
     }, [editingTodo]);
 
@@ -55,27 +52,52 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
         const value = e.target.value;
         if (value === "create") {
             setShowModal(true);
-            setBucket("");
+            setBucket(0);
         } else {
-            setBucket(value);
+            setBucket(Number(value));
         }
     }
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
+        if (bucket === '' || bucket === 0) {
+            alert('Please select a bucket');
+            return;
+        }
         const newTodo = {
-            id: editingTodo ? editingTodo.id : Date.now(),
+            id: editingTodo ? editingTodo.todoId : Date.now(),
             todoTitle: title,
             todoDescription: description,
             todoStatus: status,
             todoDueDate: dueDate,
             todoPriority: priority,
-            todoBucket: bucket
+            todoBucketId: parseInt(bucket)
         };
+        console.log('Sending todo to backend:', newTodo);
         if (editingTodo) {
-            dispatch({ type: "UPDATE_TODO", payload: newTodo });
+
+            try{
+                const response = await todoApiService.updateTodo(newTodo.id, newTodo);
+                    dispatch({
+                        type: "UPDATE_TODO",
+                        payload: response.data
+                });
+            }catch(error){
+                console.error('Failed to update todo:', error);
+            }
+           // dispatch({ type: "UPDATE_TODO", payload: newTodo });
         } else {
-            dispatch({ type: "ADD_TODO", payload: newTodo });
+
+            try {
+                const response = await todoApiService.createTodo(newTodo);
+                    dispatch({
+                        type: "ADD_TODO",
+                        payload: response.data
+                    });
+            } catch (error) {
+                    console.error('Failed to create todo:', error);
+            }
+            //dispatch({ type: "ADD_TODO", payload: newTodo });
         }
         clearForm();
         dispatch({ type: "SET_EDITING_TODO", payload: null });
@@ -91,7 +113,7 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
         setStatus("Pending");
         setDueDate("");
         setPriority("Low");
-        setBucket("");
+        setBucket('');
     }
     
 
@@ -150,10 +172,11 @@ export default function Todo({ buckets, setShowModal, todos, dispatch, editingTo
                     <label className='col-sm-2 col-form-label text-start'>Bucket</label>
                     <div className="col-sm-7">
                         <select className='form-select form-select-sm' value={bucket} onChange={(e) => handleBucket(e)}>
+                            <option value="">-- Select Bucket --</option>
                             { buckets.length === 0 
-                            ? (<option value=""></option>)
+                            ? null
                             : buckets.map((item, index) => (
-                                <option key={index} value={item.bucketName}>{item.bucketName}</option>
+                                <option key={index} value={item.bucketId}>{item.bucketName}</option>
                             ))}
                             <option value="create">Create New Bucket</option>
                         </select>

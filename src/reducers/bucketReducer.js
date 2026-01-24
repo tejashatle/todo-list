@@ -11,14 +11,15 @@ export const bucketReducer = (state, action) => {
                 buckets: [...state.buckets, action.payload]
             }
         case "UPDATE_BUCKET":
+            debugger;
             return {
                 ...state,
-                buckets: state.buckets.map(b => b.id === action.payload.id ? action.payload : b)
+                buckets: state.buckets.map(b => b.bucketId === action.payload.bucketId ? action.payload : b)
             }
         case "DELETE_BUCKET":
             return {
                 ...state,
-                buckets: state.buckets.filter(b => b.id !== action.payload)
+                buckets: state.buckets.filter(b => b.bucketId !== action.payload)
             }
         case "SET_EDITING_BUCKET":
             return {
