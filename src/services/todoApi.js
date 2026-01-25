@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configure the base URL for your Spring Boot backend
-const TODO_API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/todo';
+const TODO_API_BASE_URL = process.env.REACT_APP_API_URL || 'https://todo-app-springreact.netlify.app/todo';
 
 
 const todoApi = axios.create({

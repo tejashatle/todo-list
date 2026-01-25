@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configure the base URL for your Spring Boot backend
-const BUCKET_API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/bucket';
+const BUCKET_API_BASE_URL = process.env.REACT_APP_API_URL || 'https://todo-app-springreact.netlify.app/bucket';
 
 
 const bucketApi = axios.create({
