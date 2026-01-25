@@ -1,4 +1,3 @@
-import react from 'react';
 import Bucket from './Bucket';
 
 export default function Modal({ buckets, setBuckets, showModal, setShowModal, dispatch }){

@@ -1,5 +1,4 @@
 import React from "react";
-import TodoCard from "./TodoCard";
 import { todoApiService } from "../services/todoApi";
 
 export default function TodoList({ todos, dispatch, setStatus }){
