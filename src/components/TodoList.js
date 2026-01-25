@@ -13,6 +13,7 @@ export default function TodoList({ todos, dispatch, setStatus }){
     const handleDelete = async (e, todo) => {
         try{
             const response = await todoApiService.deleteTodo(todo.todoId);
+            console.log(response.data);
             dispatch({ type: "DELETE_TODO", payload: todo.todoId });
         }catch(error){
             console.error(error);
