@@ -156,8 +156,8 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket,
                             placeholder='Type to search or add category...'
                             value={category}
                             onChange={handleCategoryChange}
-                            onFocus={() => category && setShowSuggestions(true)}
-                            onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
+                            onFocus={() => filteredCategories.length > 0 && setShowSuggestions(true)}
+                            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                             autoComplete='off'
                         />
                         
@@ -180,7 +180,10 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket,
                                 {filteredCategories.map((cat, index) => (
                                     <div
                                         key={index}
-                                        onClick={() => handleSelectCategory(cat)}
+                                        onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            handleSelectCategory(cat);
+                                        }}
                                         style={{
                                             padding: '10px 12px',
                                             cursor: 'pointer',
