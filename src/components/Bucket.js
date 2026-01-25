@@ -9,11 +9,29 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket,
     const [category, setCategory] = useState('');
     const [filteredCategories, setFilteredCategories] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const[error, setError] = useState("");
 
-
+    const formValidations = () => {
+        if(bucketName === null || bucketName === ""){
+            return "Name";
+        }else if (bucketDesc === null || bucketDesc === ""){
+            return "Description";
+        }else if(category === null || category === ""){
+            return "Category";
+        }
+    }
 
     const submitForm = async (e) => {
         e.preventDefault();
+
+        const attribute = formValidations();
+        if(attribute){
+            setError(`Please enter valid ${attribute}`);
+            setTimeout(() => {
+                setError("");
+            }, 2000);
+            return;
+        }
 
         const newBucket = {
             id: editingBucket ? editingBucket.bucketId : '',
@@ -113,7 +131,7 @@ export default function Bucket({ buckets, setShowModal, dispatch, editingBucket,
         <div className='container-sm mt-3' width="300px">
 
             <h2 className='my-4'>{!showModal ? 'Bucket' : '' }</h2>
-
+            <p className='text-danger'>{error}</p>
             <form onSubmit={(e) => submitForm(e)}>
                 <div className='row mb-3'>
                     <label className='col-sm-2 col-form-label text-start'>Enter Bucket Name</label>

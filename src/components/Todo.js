@@ -75,7 +75,6 @@ export default function Todo({ todos, buckets, setShowModal, dispatch, editingTo
         e.preventDefault();
        
         const attribute = formValidations();
-        console.log(attribute);
         if(attribute){
             setError(`Please enter valid ${attribute}`);
             setTimeout(() => {
