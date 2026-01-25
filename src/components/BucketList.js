@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import BucketCard from "./BucketCard";
+import React from "react";
 import { bucketApiService } from "../services/bucketApi";
 export default function BucketList({ buckets, dispatch, showModal}){
 

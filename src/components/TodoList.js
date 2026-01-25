@@ -22,17 +22,36 @@ export default function TodoList({ todos, dispatch, setStatus }){
         dispatch({ type: "CANCEL_EDITING_TODO"})
     }
 
-    const handleIsChecked = (e, todo) => {
+    const handleIsChecked = async (e, todo) => {
         if(e.target.checked){
             todo.todoStatus = "Completed";
         }else{
             todo.todoStatus = "In Progress";
         }
-        dispatch({
-            type: "IS_COMPLETED",
-            payload: todo
-        })
+
+        try{
+            const response = await todoApiService.updateTodoStatus(todo.todoId, todo.todoStatus);
+             dispatch({
+                type: "IS_COMPLETED",
+                payload: response.data
+            })
+        }catch(error){
+            console.error(error);
+        }
+       
     }
+
+
+    function prettifyDateTime(str) {
+     const [date] = str.split("T");
+
+    // Assuming 03 is the month and 01 is the day – otherwise, those could be swapped
+    const [year, month, day] = date.split("-")
+
+    // Added slashes and the space before the time
+    return `${day}/${month}/${year}`
+    }
+
     
     return (
         <div className="container mt-4">
@@ -62,12 +81,12 @@ export default function TodoList({ todos, dispatch, setStatus }){
                         <td>{item.todoTitle}</td>
                         <td>{item.todoDescription}</td>
                         <td>{item.todoStatus}</td>
-                        <td>{item.todoDueDate}</td>
+                        <td>{prettifyDateTime(item.todoDueDate)}</td>
                         <td>{item.todoPriority}</td>
                         <td>{item.todoBucketName}</td>
                         <td>
-                            <button type="submit" className="btn btn-outline-primary btn-sm mx-2 px-4" onClick={(e) => handleEdit(e, item)} >Edit</button>
-                            <button type="submit" className="btn btn-outline-danger btn-sm px-4" onClick={(e) => handleDelete(e, item)} >Delete</button>
+                            <button type="submit" className="btn btn-outline-primary btn-sm m-2" onClick={(e) => handleEdit(e, item)} disabled={item.todoStatus === "Completed" ? true : false} >Edit</button>
+                            <button type="submit" className="btn btn-outline-danger btn-sm" onClick={(e) => handleDelete(e, item)} disabled={item.todoStatus === "Completed" ? true : false} >Delete</button>
                         </td>
                     </tr>
                 ))

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import TodoList from './TodoList';
-import { useNavigate } from 'react-router-dom';
 import { todoApiService } from '../services/todoApi';
 
 export default function Todo({ todos, buckets, setShowModal, dispatch, editingTodo }){
@@ -13,9 +12,7 @@ export default function Todo({ todos, buckets, setShowModal, dispatch, editingTo
     const[priority, setPriority] = useState("Low");
     const[bucket, setBucket] = useState("");
 
-
-    const navigate = useNavigate();
-
+    const[error, setError] = useState("");
 
     useEffect(() => {
         if (editingTodo) {
@@ -58,12 +55,39 @@ export default function Todo({ todos, buckets, setShowModal, dispatch, editingTo
         }
     }
 
+    const formValidations = () => {
+        if(title === null || title === ""){
+            return "title";
+        }else if (description === null || description === ""){
+            return "description";
+        }else if(status === null || status === ""){
+            return "status";
+        }else if(dueDate === null || dueDate === ""){
+            return "dueDate";
+        }else if(priority === null || priority === ""){
+            return "priority";
+        }else if(bucket === null || bucket === 0 || bucket === ""){
+            return "bucket";
+        }
+    }
+
     const submitForm = async (e) => {
         e.preventDefault();
-        if (bucket === '' || bucket === 0) {
-            alert('Please select a bucket');
+       
+        const attribute = formValidations();
+        console.log(attribute);
+        if(attribute){
+            setError(`Please enter valid ${attribute}`);
+            setTimeout(() => {
+                setError("");
+            }, 2000);
             return;
         }
+        
+        //  if (bucket === '' || bucket === 0) {
+        //     alert('Please select a bucket');
+        //     return;
+        // }
         const newTodo = {
             id: editingTodo ? editingTodo.todoId : Date.now(),
             todoTitle: title,
@@ -121,7 +145,7 @@ export default function Todo({ todos, buckets, setShowModal, dispatch, editingTo
         <div className='container-sm mt-3' width="300px">
 
             <h2 className='my-4'>Todo</h2>
-
+            <p className='text-danger'>{error}</p>
             <form onSubmit={(e) => submitForm(e)}>
                 <div className='row mb-3'>
                     <label className='col-sm-2 col-form-label text-start'>Enter Title</label>

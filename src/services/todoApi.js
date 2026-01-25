@@ -41,7 +41,7 @@ export const todoApiService = {
   getTodosByBucket: (bucketId) => todoApi.get(`/todos/bucket/${bucketId}`),
   
   // Mark todo as completed
-  completeTodo: (id) => todoApi.patch(`/todos/${id}/complete`),
+  updateTodoStatus: (id, status) => todoApi.patch(`/changeStatus/${id}/${status}`),
 };
 
 export default todoApi;
