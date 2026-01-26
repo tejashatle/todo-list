@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { bucketApiService } from "../services/bucketApi";
+import { todoApiService } from "../services/todoApi";
+
 export default function BucketList({ buckets, dispatch, showModal}){
 
+    const[error, setError] = useState("");
    
 
     if (showModal) return null;
@@ -16,6 +19,15 @@ export default function BucketList({ buckets, dispatch, showModal}){
     const handleDelete = async (e, bucket) => {
 
         try {
+
+                const res = await todoApiService.getTodoByBucketId(bucket.bucketId);
+                if(res.data.length > 0){
+                    setError("Can not delete this bucket as todo(s) are linked with this bucket.")
+                    setTimeout(() => {
+                        setError("");
+                    }, 2000);
+                    return;
+                }
                 const response = await bucketApiService.deleteBucket(bucket.bucketId);
                 console.log(response);
                 dispatch({
@@ -34,7 +46,7 @@ export default function BucketList({ buckets, dispatch, showModal}){
 
     return (
         <div className="container mt-4">
-
+            <p className='text-danger'>{error}</p>
             <table className="table">
                 <thead className="table-light">
                     <tr>

@@ -27,6 +27,9 @@ export const todoApiService = {
   
   // Get todo by ID
   getTodoById: (id) => todoApi.get(`/todos/${id}`),
+
+  // Get todo by bucket Id
+  getTodoByBucketId: (bucketId) => todoApi.get(`/viewTodos/${bucketId}`),
   
   // Create new todo
   createTodo: (todoData) => todoApi.post('/createTodo', todoData),
